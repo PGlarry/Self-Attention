@@ -18,6 +18,13 @@ Thumbs.db
 # Duplicate local copies
 figures - 副本/
 
+# Private manuscript/review/planning materials
+paper/
+分析/
+研究方案讨论/
+latest_review*.docx
+latest_review*.md
+
 # Large local-only artifacts that should not be added accidentally
 models/
 checkpoints/
