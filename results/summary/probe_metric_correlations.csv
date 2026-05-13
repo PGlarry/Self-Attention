@@ -1,0 +1,10 @@
+﻿model_tag,metric,corr_with_kl
+gemma3_4b,source_erank,0.154358
+gemma3_4b,source_diag_conc,0.090149
+gemma3_4b,source_mean_dist,-0.133169
+ministral8b,source_erank,-0.03524
+ministral8b,source_diag_conc,-0.137873
+ministral8b,source_mean_dist,0.087108
+qwen3_8b,source_erank,-0.169259
+qwen3_8b,source_diag_conc,-0.122896
+qwen3_8b,source_mean_dist,0.139776

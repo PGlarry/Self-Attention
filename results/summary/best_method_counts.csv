@@ -1,0 +1,6 @@
+﻿model_tag,method,best_count,best_fraction
+gemma3_4b,sparse_topk,3264,1.0
+ministral8b,lowrank,158,0.011429
+ministral8b,sparse_topk,13666,0.988571
+qwen3_8b,lowrank,47,0.0034
+qwen3_8b,sparse_topk,13777,0.9966

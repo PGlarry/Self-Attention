@@ -1,0 +1,8 @@
+﻿model_tag,classifier,n,classes,majority_class,accuracy,balanced_accuracy,baseline_accuracy,baseline_balanced_accuracy
+ALL,decision_tree_depth3,30912,"lowrank,sparse_topk",sparse_topk,0.995649,0.591973,0.994989,0.5
+ALL,random_forest_depth5,30912,"lowrank,sparse_topk",sparse_topk,0.892537,0.919815,0.994989,0.5
+gemma3_4b,majority_only,3264,sparse_topk,sparse_topk,1.0,1.0,1.0,1.0
+ministral8b,decision_tree_depth3,13824,"lowrank,sparse_topk",sparse_topk,0.989005,0.732933,0.985822,0.5
+ministral8b,random_forest_depth5,13824,"lowrank,sparse_topk",sparse_topk,0.947338,0.923004,0.985822,0.5
+qwen3_8b,decision_tree_depth3,13824,"lowrank,sparse_topk",sparse_topk,0.997685,0.713706,0.997975,0.5
+qwen3_8b,random_forest_depth5,13824,"lowrank,sparse_topk",sparse_topk,0.978299,0.989127,0.997975,0.5

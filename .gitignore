@@ -1,0 +1,33 @@
+# Python/cache
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+
+# Local environments
+.venv/
+venv/
+env/
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Duplicate local copies
+figures - 副本/
+
+# Large local-only artifacts that should not be added accidentally
+models/
+checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Logs and temporary files
+*.log
+*.tmp
+~$*.docx
+

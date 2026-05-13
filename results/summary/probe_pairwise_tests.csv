@@ -1,0 +1,10 @@
+﻿model_tag,left_group,right_group,left_mean_kl,right_mean_kl,mean_diff_left_minus_right,mannwhitney_u,p_value,n_left,n_right
+gemma3_4b,high_complex_global,local_band,0.492185,0.430337,0.061847,557.0,0.30809,36,36
+gemma3_4b,high_complex_global,low_rank_diffuse,0.492185,0.036286,0.455899,741.0,0.297522,36,36
+gemma3_4b,local_band,low_rank_diffuse,0.430337,0.036286,0.394051,866.0,0.014304,36,36
+ministral8b,high_complex_global,local_band,0.05582,0.003796,0.052025,1171.0,0.0,36,36
+ministral8b,high_complex_global,low_rank_diffuse,0.05582,0.00366,0.05216,1143.0,0.0,36,36
+ministral8b,local_band,low_rank_diffuse,0.003796,0.00366,0.000136,499.0,0.094433,36,36
+qwen3_8b,high_complex_global,local_band,0.023318,0.037011,-0.013694,543.0,0.239228,36,36
+qwen3_8b,high_complex_global,low_rank_diffuse,0.023318,0.084459,-0.061141,425.0,0.012215,36,36
+qwen3_8b,local_band,low_rank_diffuse,0.037011,0.084459,-0.047448,508.0,0.116162,36,36

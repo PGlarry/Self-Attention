@@ -1,0 +1,82 @@
+# Structured Self-Attention Analysis
+
+This repository contains the experimental materials, data, analysis scripts, figures, reviews, and working paper draft for:
+
+**How Structured is Decoder Self-Attention? Spectral Landscapes, Oracle Approximation, and Structure-Constrained Probing**
+
+The project studies full self-attention matrices from pretrained decoder LLMs through three linked questions:
+
+1. What spectral and spatial structure appears in real layer-head attention matrices?
+2. Which structured approximation families best preserve those matrices?
+3. Can structure-constrained interventions reveal architecture-specific head sensitivity?
+
+## Repository Contents
+
+| Path | Contents |
+|---|---|
+| `prompts/` | 12 full instruction prompts across Travel, Business, and Technical domains |
+| `scripts/` | Extraction, approximation, probe, selection, plotting, and reviewer-response analysis scripts |
+| `results/spectral/` | Spectral and locality metrics for all extracted attention matrices |
+| `results/approx/` | Structured approximation benchmark CSVs |
+| `results/probe/` | Causal probe outputs and selected head targets |
+| `results/summary/` | Aggregated tables, statistics, reviewer-response robustness summaries |
+| `figures/` | Paper figures generated from the result CSVs |
+| `paper/` | Markdown draft, Word/PDF working drafts, BibTeX references, DOCX generation script |
+| `研究方案讨论/` | Early research planning notes |
+| `分析/` | Expert review reports and improvement plan |
+
+## Main Findings
+
+- Sparse top-k is the strongest **oracle matrix-fidelity** family. Retaining 20% of entries per row reduces mean relative Frobenius error to roughly 0.032-0.035 across the tested models.
+- When sparse top-k is excluded, the low-rank-initialized projected family is the safest dense fallback, winning 81.5%-96.3% of layer-head-prompt cases.
+- Rank and locality are separable. Qwen3 contains low-rank diffuse heads with very low effective rank but long mean attention distance.
+- A banded-local intervention reveals robust high-complexity global-head sensitivity in Ministral and more outlier-driven but interpretable patterns in Gemma3 and Qwen3.
+
+## Reproducing the Analysis
+
+Install dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+Run model-dependent experiments, replacing `<model_path>` with a local Hugging Face checkpoint path:
+
+```bash
+python scripts/s1_extract_spectra.py <model_path> qwen3_8b
+python scripts/s2_approximate.py <model_path> qwen3_8b
+python scripts/s5_select_probe_targets.py 6
+python scripts/s3_causal_probe.py <model_path> qwen3_8b TR01,TR08,BZ01,BZ09,TC01,TC10 results/probe/probe_targets.csv
+```
+
+Run post-hoc summaries and figures from existing CSVs:
+
+```bash
+python scripts/s6_analyze_results.py
+python scripts/s7_selection_and_stats.py
+python scripts/s8_enhance_rq2_selection.py
+python scripts/s9_paper_support.py
+python scripts/s5_review_response_stats.py
+python scripts/s4_figures.py
+python paper/build_docx.py
+```
+
+## Notes on Scope
+
+- The sparse top-k results are an oracle fidelity baseline, not a claim of wall-clock speedup.
+- The Monarch-related benchmark uses a block-diagonal Monarch-style proxy, not the full Monarch matrix design space.
+- The current probe uses a banded-local intervention and should be interpreted as structure sensitivity, not a complete semantic explanation of model reasoning.
+- Local model checkpoints are not included.
+
+## Current Paper Draft
+
+The latest working draft is available at:
+
+- `paper/main_draft.md`
+- `paper/PPS_selfatten_working_draft.docx`
+- `paper/PPS_selfatten_working_draft.pdf`
+
+## License
+
+No explicit license has been selected yet. Please add one before public reuse if needed.
+
