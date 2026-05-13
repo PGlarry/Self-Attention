@@ -1,0 +1,5 @@
+﻿model_tag,n,agreement_rate,frob_lowrank_fraction,kl_lowrank_fraction,frob_monarch_fraction,kl_monarch_fraction,frob_banded_fraction,kl_banded_fraction
+ALL,30912,0.916117,0.902886,0.983405,0.089674,0.016046,0.00744,0.00055
+gemma3_4b,3264,0.828125,0.814951,0.982537,0.177696,0.01685,0.007353,0.000613
+ministral8b,13824,0.969184,0.963469,0.994285,0.036531,0.005715,0.0,0.0
+qwen3_8b,13824,0.883825,0.863064,0.972729,0.122034,0.026186,0.014902,0.001085
