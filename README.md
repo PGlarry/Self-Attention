@@ -1,6 +1,6 @@
 # Structured Self-Attention Analysis
 
-This repository contains the experimental materials, data, analysis scripts, figures, reviews, and working paper draft for:
+This repository contains the public experimental materials, data, analysis scripts, and figures for:
 
 **How Structured is Decoder Self-Attention? Spectral Landscapes, Oracle Approximation, and Structure-Constrained Probing**
 
@@ -21,9 +21,9 @@ The project studies full self-attention matrices from pretrained decoder LLMs th
 | `results/probe/` | Causal probe outputs and selected head targets |
 | `results/summary/` | Aggregated tables, statistics, reviewer-response robustness summaries |
 | `figures/` | Paper figures generated from the result CSVs |
-| `paper/` | Markdown draft, Word/PDF working drafts, BibTeX references, DOCX generation script |
-| `研究方案讨论/` | Early research planning notes |
-| `分析/` | Expert review reports and improvement plan |
+| `artifact_manifest.json` | Public artifact hashes, environment notes, model revisions, and reproducibility constants |
+
+Private manuscript, review, and planning materials are intentionally excluded from the public repository.
 
 ## Main Findings
 
@@ -57,8 +57,9 @@ python scripts/s7_selection_and_stats.py
 python scripts/s8_enhance_rq2_selection.py
 python scripts/s9_paper_support.py
 python scripts/s5_review_response_stats.py
+python scripts/s10_selector_robustness.py
+python scripts/s11_review_hardening_stats.py
 python scripts/s4_figures.py
-python paper/build_docx.py
 ```
 
 ## Notes on Scope
@@ -68,13 +69,9 @@ python paper/build_docx.py
 - The current probe uses a banded-local intervention and should be interpreted as structure sensitivity, not a complete semantic explanation of model reasoning.
 - Local model checkpoints are not included.
 
-## Current Paper Draft
+## Public Artifact Scope
 
-The latest working draft is available at:
-
-- `paper/main_draft.md`
-- `paper/PPS_selfatten_working_draft.docx`
-- `paper/PPS_selfatten_working_draft.pdf`
+The public artifact contains prompts, scripts, CSV results, figures, and reproducibility metadata. The manuscript draft and internal review notes are private and are not part of this repository.
 
 ## License
 

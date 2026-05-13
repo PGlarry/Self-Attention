@@ -16,6 +16,8 @@
 - `scripts/s7_selection_and_stats.py`: trains structure-selection models and computes probe pairwise tests.
 - `scripts/s8_enhance_rq2_selection.py`: runs non-sparse family selection analysis.
 - `scripts/s9_paper_support.py`: generates sparse-retention, Qwen reversal, and discussion-support tables.
+- `scripts/s10_selector_robustness.py`: adds selector no-length ablation, leave-one-prompt-out evaluation, per-class metrics, confusion matrices, and Frobenius/KL winner agreement.
+- `scripts/s11_review_hardening_stats.py`: adds clustered probe statistics, exact head-label permutation tests, leave-one-domain/model-out selector checks, length-control regression, and artifact hashes.
 
 ## Results
 
@@ -33,13 +35,8 @@
 - `figures/fig5_probe_group_boxplot.png`
 - `figures/fig6_sparse_retention_curve.png`
 
-## Paper and Review Materials
+## Public Reproducibility Metadata
 
-- `paper/main_draft.md`: main paper source draft.
-- `paper/references.bib`: BibTeX references.
-- `paper/build_docx.py`: DOCX generator.
-- `paper/PPS_selfatten_working_draft.docx`: current Word draft.
-- `paper/PPS_selfatten_working_draft.pdf`: current PDF draft.
-- `分析/`: expert review reports and improvement plan.
-- `研究方案讨论/`: early research planning notes.
+- `artifact_manifest.json`: public file hashes, model revisions, environment versions, seeds, and numerical constants.
+- Manuscript drafts, expert review reports, and planning notes are intentionally excluded from the public repository.
 

@@ -1,0 +1,10 @@
+﻿model_tag,target_group,n_head_clusters,mean_of_head_medians,mean_ci95_low,mean_ci95_high,median_of_head_medians,median_ci95_low,median_ci95_high
+gemma3_4b,high_complex_global,6,0.14652,0.011252,0.404741,0.020738,0.005777,0.413046
+gemma3_4b,local_band,6,0.243114,0.053811,0.453272,0.136864,0.003402,0.589076
+gemma3_4b,low_rank_diffuse,6,0.025731,0.009844,0.045254,0.015576,0.006978,0.05464
+ministral8b,high_complex_global,6,0.03301,0.011322,0.062733,0.019177,0.007395,0.072458
+ministral8b,local_band,6,0.002323,0.000746,0.004496,0.001629,0.000431,0.00491
+ministral8b,low_rank_diffuse,6,0.003424,0.00206,0.004864,0.002908,0.0016,0.005762
+qwen3_8b,high_complex_global,6,0.011203,0.004154,0.019263,0.010305,0.001079,0.022224
+qwen3_8b,local_band,6,0.014275,0.007898,0.022057,0.01281,0.005441,0.024572
+qwen3_8b,low_rank_diffuse,6,0.028917,0.01451,0.046393,0.02615,0.00869,0.051912

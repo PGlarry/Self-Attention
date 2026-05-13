@@ -1,0 +1,10 @@
+﻿model_tag,left_group,right_group,n_left_heads,n_right_heads,observed_mean_diff,exact_perm_p_mean_diff,observed_median_diff,exact_perm_p_median_diff,cliffs_delta
+gemma3_4b,high_complex_global,local_band,6,6,-0.096594,0.677489,-0.116126,0.318182,-0.166667
+gemma3_4b,high_complex_global,low_rank_diffuse,6,6,0.120789,0.69697,0.005162,0.87013,0.0
+gemma3_4b,local_band,low_rank_diffuse,6,6,0.217383,0.060606,0.121289,0.060606,0.388889
+ministral8b,high_complex_global,local_band,6,6,0.030687,0.002165,0.017548,0.012987,1.0
+ministral8b,high_complex_global,low_rank_diffuse,6,6,0.029586,0.002165,0.016268,0.012987,1.0
+ministral8b,local_band,low_rank_diffuse,6,6,-0.0011,0.419913,-0.00128,0.277056,-0.444444
+qwen3_8b,high_complex_global,local_band,6,6,-0.003072,0.595238,-0.002505,0.796537,-0.222222
+qwen3_8b,high_complex_global,low_rank_diffuse,6,6,-0.017715,0.082251,-0.015845,0.08658,-0.611111
+qwen3_8b,local_band,low_rank_diffuse,6,6,-0.014643,0.162338,-0.01334,0.294372,-0.444444
