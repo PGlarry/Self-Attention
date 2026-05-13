@@ -31,6 +31,7 @@ Private manuscript, review, and planning materials are intentionally excluded fr
 - When sparse top-k is excluded, the low-rank-initialized projected family is the safest dense fallback, winning 81.5%-96.3% of layer-head-prompt cases.
 - Rank and locality are separable. Qwen3 contains low-rank diffuse heads with very low effective rank but long mean attention distance.
 - A banded-local intervention reveals robust high-complexity global-head sensitivity in Ministral and more outlier-driven but interpretable patterns in Gemma3 and Qwen3.
+- A supplemental Qwen3 projected low-rank (PLR) probe provides an orthogonal check: selected Qwen3 local-band heads are much more sensitive to PLR-r4 replacement than to banded-local replacement, while low-rank diffuse heads show the opposite high-KL pattern under banding rather than PLR.
 
 ## Reproducing the Analysis
 
@@ -47,6 +48,7 @@ python scripts/s1_extract_spectra.py <model_path> qwen3_8b
 python scripts/s2_approximate.py <model_path> qwen3_8b
 python scripts/s5_select_probe_targets.py 6
 python scripts/s3_causal_probe.py <model_path> qwen3_8b TR01,TR08,BZ01,BZ09,TC01,TC10 results/probe/probe_targets.csv
+python scripts/s3_causal_probe.py <model_path> qwen3_8b TR01,TR08,BZ01,BZ09,TC01,TC10 results/probe/probe_targets.csv --intervention plr --rank 4
 ```
 
 Run post-hoc summaries and figures from existing CSVs:
@@ -65,8 +67,9 @@ python scripts/s4_figures.py
 ## Notes on Scope
 
 - The sparse top-k results are an oracle fidelity baseline, not a claim of wall-clock speedup.
-- The Monarch-related benchmark uses a block-diagonal Monarch-style proxy, not the full Monarch matrix design space.
-- The current probe uses a banded-local intervention and should be interpreted as structure sensitivity, not a complete semantic explanation of model reasoning.
+- The Monarch-related benchmark uses a simplified block-diagonal proxy, not the full Monarch matrix design space.
+- The main cross-model probe uses a banded-local intervention and should be interpreted as structure sensitivity, not a complete semantic explanation of model reasoning.
+- The supplemental PLR probe is currently limited to selected Qwen3 heads and should be read as targeted orthogonal evidence, not a full cross-model double dissociation.
 - Local model checkpoints are not included.
 
 ## Public Artifact Scope

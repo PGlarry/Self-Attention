@@ -394,6 +394,8 @@ def write_artifact_manifest() -> dict:
         "numerical_constants": {
             "kl_epsilon": 1e-12,
             "probe_band_half_width": 5,
+            "supplemental_qwen_plr_ranks": [2, 4],
+            "main_supplemental_qwen_plr_rank": 4,
         },
         "files": files,
     }

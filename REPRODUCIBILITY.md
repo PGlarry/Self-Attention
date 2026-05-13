@@ -51,6 +51,7 @@ Model weights are not included.
 - Default bitsandbytes 4-bit type observed locally: `fp4`.
 - KL epsilon: `1e-12`.
 - Probe band half-width: `5`.
+- Supplemental Qwen3 PLR probe ranks: `2` and `4`; rank `4` is the main orthogonal comparison.
 - scikit-learn random state: `42`.
 - Bootstrap RNG seed: `20260513`.
 
@@ -67,4 +68,10 @@ python scripts/s5_review_response_stats.py
 python scripts/s10_selector_robustness.py
 python scripts/s11_review_hardening_stats.py
 python scripts/s4_figures.py
+```
+
+The supplemental Qwen3 PLR probe requires model inference. Example rerun command:
+
+```bash
+python scripts/s3_causal_probe.py <model_path> qwen3_8b TR01,TR08,BZ01,BZ09,TC01,TC10 results/probe/probe_targets.csv --intervention plr --rank 4
 ```

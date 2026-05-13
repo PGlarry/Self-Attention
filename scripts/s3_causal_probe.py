@@ -3,6 +3,7 @@ s3_causal_probe.py — Module 3: Structured Approximation as Causal Probe
 Usage:
     python s3_causal_probe.py <model_path> <model_tag> [task_id[,task_id...]] [layer head]
     python s3_causal_probe.py <model_path> <model_tag> [task_id[,task_id...]] <targets_csv>
+    python s3_causal_probe.py <model_path> <model_tag> [task_id[,task_id...]] <targets_csv> --intervention plr --rank 2
 
 Default task_id: TR01 (one representative prompt is enough for the probe)
 Optionally specify a different task, e.g.: python s3_causal_probe.py ... TC10
@@ -13,7 +14,7 @@ Optionally scan selected heads from CSV, e.g.:
 
 Method:
     For each (layer, head), replace the attention matrix mid-forward with a
-    structured approximation (banded, w=5 — strongly local constraint), then
+    structured approximation (banded, w=5 — strongly local constraint by default), then
     measure how much the output token distribution shifts (KL divergence vs baseline).
 
     High KL → head depended heavily on global interactions → global integrator
@@ -35,36 +36,64 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 from transformers.modeling_utils import ALL_ATTENTION_FUNCTIONS
 
 if len(sys.argv) < 3:
-    print("Usage: python s3_causal_probe.py <model_path> <model_tag> [task_id] [layer head]")
+    print("Usage: python s3_causal_probe.py <model_path> <model_tag> [task_id] [layer head] [--intervention banded|plr] [--rank 2]")
     sys.exit(1)
 
-MODEL_PATH = sys.argv[1]
-MODEL_TAG  = sys.argv[2]
-TASK_ID    = sys.argv[3] if len(sys.argv) > 3 else "TR01"
+raw_args = sys.argv[1:]
+MODEL_PATH = raw_args[0]
+MODEL_TAG  = raw_args[1]
+remaining_args = raw_args[2:]
+positional_args = []
+INTERVENTION_TYPE = "banded"
+PLR_RANK = 2
+PROBE_BAND_WIDTH = 5   # half-width for the locality constraint applied as intervention
+
+i = 0
+while i < len(remaining_args):
+    arg = remaining_args[i]
+    if arg == "--intervention":
+        INTERVENTION_TYPE = remaining_args[i + 1].strip().lower()
+        i += 2
+    elif arg == "--rank":
+        PLR_RANK = int(remaining_args[i + 1])
+        i += 2
+    elif arg == "--band-width":
+        PROBE_BAND_WIDTH = int(remaining_args[i + 1])
+        i += 2
+    else:
+        positional_args.append(arg)
+        i += 1
+
+if INTERVENTION_TYPE not in {"banded", "plr"}:
+    print(f"Unsupported intervention: {INTERVENTION_TYPE}")
+    sys.exit(1)
+
+TASK_ID    = positional_args[0] if len(positional_args) > 0 else "TR01"
 TASK_IDS   = [item.strip() for item in TASK_ID.split(",") if item.strip()]
 DEVICE     = "cuda" if torch.cuda.is_available() else "cpu"
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 TARGET_CSV = None
 TARGET_LAYER = None
 TARGET_HEAD = None
-if len(sys.argv) > 4:
-    if len(sys.argv) == 5 and sys.argv[4].lower().endswith(".csv"):
-        TARGET_CSV = Path(sys.argv[4])
+if len(positional_args) > 1:
+    if len(positional_args) == 2 and positional_args[1].lower().endswith(".csv"):
+        TARGET_CSV = Path(positional_args[1])
     else:
-        TARGET_LAYER = int(sys.argv[4])
-        TARGET_HEAD = int(sys.argv[5]) if len(sys.argv) > 5 else None
+        TARGET_LAYER = int(positional_args[1])
+        TARGET_HEAD = int(positional_args[2]) if len(positional_args) > 2 else None
 
 PROMPT_DIR = PROJECT_ROOT / "prompts"
 TASK_TAG   = "multi" if len(TASK_IDS) > 1 else TASK_IDS[0]
-OUT_CSV    = PROJECT_ROOT / "results" / "probe" / f"probe_{MODEL_TAG}_{TASK_TAG}.csv"
+INTERVENTION_SUFFIX = "" if INTERVENTION_TYPE == "banded" else f"_{INTERVENTION_TYPE}_r{PLR_RANK}"
+OUT_CSV    = PROJECT_ROOT / "results" / "probe" / f"probe_{MODEL_TAG}_{TASK_TAG}{INTERVENTION_SUFFIX}.csv"
 OUT_CSV.parent.mkdir(parents=True, exist_ok=True)
-
-PROBE_BAND_WIDTH = 5   # half-width for the locality constraint applied as intervention
 
 ACTIVE_INTERVENTION = {
     "layer": None,
     "head": None,
+    "intervention_type": INTERVENTION_TYPE,
     "band_width": PROBE_BAND_WIDTH,
+    "plr_rank": PLR_RANK,
     "fired": False,
 }
 
@@ -99,6 +128,19 @@ def approx_banded_batch(A: torch.Tensor, half_width: int) -> torch.Tensor:
     A_approx = A * mask
     row_sums = A_approx.sum(dim=-1, keepdim=True).clamp(min=1e-12)
     return A_approx / row_sums
+
+
+def approx_plr_batch(A: torch.Tensor, rank: int) -> torch.Tensor:
+    """Projected low-rank approximation for attention matrices: (batch, seq, seq)."""
+    approx_rows = []
+    for item in A:
+        U, S, Vh = torch.linalg.svd(item.float(), full_matrices=False)
+        r = min(rank, S.shape[0])
+        A_approx = (U[:, :r] * S[:r]) @ Vh[:r, :]
+        A_approx = A_approx.clamp(min=0.0)
+        row_sums = A_approx.sum(dim=-1, keepdim=True).clamp(min=1e-12)
+        approx_rows.append((A_approx / row_sums).to(A.dtype))
+    return torch.stack(approx_rows, dim=0)
 
 
 def probe_attention_forward(
@@ -138,10 +180,16 @@ def probe_attention_forward(
     if target_layer is not None and getattr(module, "layer_idx", None) == target_layer:
         if target_head is not None and target_head < attn_weights.shape[1]:
             attn_weights = attn_weights.clone()
-            attn_weights[:, target_head, :, :] = approx_banded_batch(
-                attn_weights[:, target_head, :, :],
-                int(ACTIVE_INTERVENTION["band_width"]),
-            )
+            if ACTIVE_INTERVENTION["intervention_type"] == "plr":
+                attn_weights[:, target_head, :, :] = approx_plr_batch(
+                    attn_weights[:, target_head, :, :],
+                    int(ACTIVE_INTERVENTION["plr_rank"]),
+                )
+            else:
+                attn_weights[:, target_head, :, :] = approx_banded_batch(
+                    attn_weights[:, target_head, :, :],
+                    int(ACTIVE_INTERVENTION["band_width"]),
+                )
             ACTIVE_INTERVENTION["fired"] = True
 
     attn_output = torch.matmul(attn_weights, value_states)
@@ -206,6 +254,7 @@ def main():
     print(f"Model   : {MODEL_PATH}")
     print(f"Tag     : {MODEL_TAG}")
     print(f"Tasks   : {','.join(TASK_IDS)}")
+    print(f"Interv. : {INTERVENTION_TYPE}" + (f" rank={PLR_RANK}" if INTERVENTION_TYPE == "plr" else f" band_width={PROBE_BAND_WIDTH}"))
     print(f"Output  : {OUT_CSV}")
     if TARGET_CSV is not None:
         print(f"Targets : {TARGET_CSV}")
@@ -234,7 +283,8 @@ def main():
     # ── Function-level intervention scan ──────────────────────────────────────
     fields = [
         "task_id", "model_tag", "layer", "head", "seq_len",
-        "band_width", "target_group", "selection_rank",
+        "intervention_type", "band_width", "plr_rank",
+        "target_group", "selection_rank",
         "source_erank", "source_diag_conc", "source_mean_dist",
         "intervention_fired", "kl_div", "js_div", "top10_overlap",
     ]
@@ -317,7 +367,9 @@ def main():
                 ACTIVE_INTERVENTION.update({
                     "layer": layer_idx,
                     "head": head_idx,
+                    "intervention_type": INTERVENTION_TYPE,
                     "band_width": PROBE_BAND_WIDTH,
+                    "plr_rank": PLR_RANK,
                     "fired": False,
                 })
 
@@ -347,7 +399,9 @@ def main():
                     "layer":       layer_idx,
                     "head":        head_idx,
                     "seq_len":     seq_len,
+                    "intervention_type": INTERVENTION_TYPE,
                     "band_width":  PROBE_BAND_WIDTH,
+                    "plr_rank":    PLR_RANK if INTERVENTION_TYPE == "plr" else "",
                     "target_group": target_group,
                     "selection_rank": selection_rank,
                     "source_erank": source_erank,

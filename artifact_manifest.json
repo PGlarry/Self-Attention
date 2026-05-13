@@ -44,7 +44,12 @@
   },
   "numerical_constants": {
     "kl_epsilon": 1e-12,
-    "probe_band_half_width": 5
+    "probe_band_half_width": 5,
+    "supplemental_qwen_plr_ranks": [
+      2,
+      4
+    ],
+    "main_supplemental_qwen_plr_rank": 4
   },
   "files": [
     {
@@ -108,14 +113,24 @@
       "sha256": "129df21c319f7ed6fe042a6e5cd9b79afd64b8462110b1083f5241003b138b56"
     },
     {
+      "path": "scripts/__pycache__/s11_review_hardening_stats.cpython-311.pyc",
+      "bytes": 29504,
+      "sha256": "d8bd3a1bbd9da8710359bc4c81311d6fb4f9420ab40fb113197e03264de68392"
+    },
+    {
+      "path": "scripts/__pycache__/s3_causal_probe.cpython-311.pyc",
+      "bytes": 26387,
+      "sha256": "6c24d292bb25196c75a73ca6f089d5695f58da92c657dadf28119332d9cd5d19"
+    },
+    {
       "path": "scripts/s10_selector_robustness.py",
       "bytes": 14000,
       "sha256": "a54b03df7858256dacc720a35fe5909dd5e6e3b7c3c242d941f0e2b5f4bee887"
     },
     {
       "path": "scripts/s11_review_hardening_stats.py",
-      "bytes": 18720,
-      "sha256": "23ae27a42362bf6809ff840ab30ad768f9c8116ea787b6bf89cb50c586eb20e2"
+      "bytes": 18821,
+      "sha256": "8855e90b050e92d502b156af8a59ee85e96a9f64a0753f65a930a3c336d34d7c"
     },
     {
       "path": "scripts/s1_extract_spectra.py",
@@ -129,8 +144,8 @@
     },
     {
       "path": "scripts/s3_causal_probe.py",
-      "bytes": 15056,
-      "sha256": "24cadd31c828de23f8ff452805a2196a855c1e1d5ee0d5cffb21afe972fa42d4"
+      "bytes": 17442,
+      "sha256": "de578b841a8591fe6a35bee733e39ced72714cb2b8b46076af6c297e504b9317"
     },
     {
       "path": "scripts/s4_figures.py",
@@ -208,6 +223,16 @@
       "sha256": "d404e6556b7e9622d64ad41bddedb27a8975c39c8e160a1602a164d976b56f2b"
     },
     {
+      "path": "results/probe/probe_qwen3_8b_multi_plr_r2.csv",
+      "bytes": 4600,
+      "sha256": "2f70591da073f8d12b042d212d5c134e589fce3b1749f0f22b2ec7107188516e"
+    },
+    {
+      "path": "results/probe/probe_qwen3_8b_multi_plr_r4.csv",
+      "bytes": 13749,
+      "sha256": "8378e1fca074c59935a795ce7e0236fb62ab3906294eb279770f6fac2fdeae5a"
+    },
+    {
       "path": "results/probe/probe_qwen3_8b_TR01.csv",
       "bytes": 2328,
       "sha256": "fcb417a2cafea50e30913d55ef0e4bc262b87ff5523c6fae7fecf75d7f4cdb59"
@@ -216,6 +241,11 @@
       "path": "results/probe/probe_targets.csv",
       "bytes": 12732,
       "sha256": "45077ec3aea6e4fb9ccbeb6b155a721f94f215f704c6b99c63ef1e1265af8565"
+    },
+    {
+      "path": "results/probe/probe_targets_qwen3_low_rank_diffuse.csv",
+      "bytes": 1742,
+      "sha256": "dd58605cce255f305160fb8c7d5eeb9034e54201677c316414239f43cd7c6cf2"
     },
     {
       "path": "results/spectral/spectral_gemma3_4b.csv",
@@ -323,6 +353,31 @@
       "sha256": "ab65c79653cef98d5492a47fa294751a1c967e6ef527625531d1a4ca4eaf1419"
     },
     {
+      "path": "results/summary/qwen_lowrank_diffuse_plr_probe_comparison.csv",
+      "bytes": 4369,
+      "sha256": "bf8b1a13bfa2ead51a50cb606a631de3e3cf0c809a8c45179320e5596a17db05"
+    },
+    {
+      "path": "results/summary/qwen_lowrank_diffuse_plr_rank_sweep.csv",
+      "bytes": 4869,
+      "sha256": "411d82cfbe7504d1ae1ab357df8d7617fda7a0ccee6c4baf70c7991cb8ebf0fd"
+    },
+    {
+      "path": "results/summary/qwen_plr_probe_summary.md",
+      "bytes": 1448,
+      "sha256": "1ec9526be5a5cfb50c564eadb0afbc5c3d2b27c2504382571acc71b132cd576e"
+    },
+    {
+      "path": "results/summary/qwen_plr_r4_probe_comparison.csv",
+      "bytes": 12636,
+      "sha256": "622f218ae5c3a88e7eb1ef76ed6d29798b881afcee53fda069163fceff24de93"
+    },
+    {
+      "path": "results/summary/qwen_plr_r4_probe_group_summary.csv",
+      "bytes": 696,
+      "sha256": "7170e485c5ee30e514319410423afcde25277255b027a71bbad1621416c6f89b"
+    },
+    {
       "path": "results/summary/qwen_reversal_cases.csv",
       "bytes": 3320,
       "sha256": "1d961ac93c80c968d87db09b86c561f15b9140764580d3fc4934fe22d97f475d"
@@ -331,6 +386,11 @@
       "path": "results/summary/report.md",
       "bytes": 2488,
       "sha256": "95d5f040d890a5e5c3b94e889ad9153e13a16c44b8d5b6abbb5bced8f5a91cd6"
+    },
+    {
+      "path": "results/summary/review_hardening_stats.md",
+      "bytes": 11411,
+      "sha256": "752b5c631db8577d0749fe7bf9107559fd51f919d7aedd29dbdc5a59ad6e954b"
     },
     {
       "path": "results/summary/review_response_stats.md",

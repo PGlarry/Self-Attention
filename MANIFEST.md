@@ -8,7 +8,7 @@
 
 - `scripts/s1_extract_spectra.py`: extracts attention matrices through eager attention and computes spectral/locality metrics.
 - `scripts/s2_approximate.py`: benchmarks sparse top-k, low-rank-initialized projected, banded, and block-diagonal proxy approximations.
-- `scripts/s3_causal_probe.py`: performs banded-local single-head interventions and records output distribution shifts.
+- `scripts/s3_causal_probe.py`: performs banded-local and optional projected low-rank (PLR) single-head interventions and records output distribution shifts.
 - `scripts/s4_figures.py`: generates all paper figures from CSV results.
 - `scripts/s5_select_probe_targets.py`: selects high-complexity global, local-band, and low-rank diffuse probe heads.
 - `scripts/s5_review_response_stats.py`: produces reviewer-response robustness statistics from existing CSVs.
@@ -24,7 +24,7 @@
 - `results/spectral/`: per-model spectral matrices summarized by prompt, layer, and head.
 - `results/approx/`: per-model approximation benchmark results.
 - `results/probe/`: causal probe outputs and selected target heads.
-- `results/summary/`: aggregated analysis tables, paper-support files, and robustness checks.
+- `results/summary/`: aggregated analysis tables, paper-support files, robustness checks, and supplemental Qwen3 PLR probe summaries.
 
 ## Figures
 
