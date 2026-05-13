@@ -33,6 +33,28 @@ Private manuscript, review, and planning materials are intentionally excluded fr
 - A banded-local intervention reveals robust high-complexity global-head sensitivity in Ministral and more outlier-driven but interpretable patterns in Gemma3 and Qwen3.
 - A supplemental Qwen3 projected low-rank (PLR) probe provides an orthogonal check: selected Qwen3 local-band heads are much more sensitive to PLR-r4 replacement than to banded-local replacement, while low-rank diffuse heads show the opposite high-KL pattern under banding rather than PLR.
 
+## Approximation Code Labels
+
+The released CSVs preserve the original experiment code labels:
+
+| CSV/code label | Paper term | Meaning |
+|---|---|---|
+| `sparse_topk` | Sparse top-k oracle | Row-wise top-k retention baseline for matrix fidelity, not a runtime acceleration claim |
+| `lowrank` | Projected low-rank / PLR | Truncated-SVD reconstruction followed by nonnegative projection and row renormalization |
+| `banded` | Banded local mask | Local window mask followed by row renormalization |
+| `monarch` | Simplified block-diagonal proxy | Legacy code label for a block-diagonal proxy; not full MonarchAttention or the full Monarch matrix design space |
+
+## Supplemental Qwen3 PLR Probe
+
+The reviewer-requested orthogonal PLR probe is released under `results/probe/` and `results/summary/`:
+
+- `results/probe/probe_qwen3_8b_multi_plr_r4.csv`
+- `results/probe/probe_qwen3_8b_multi_plr_r2.csv`
+- `results/summary/qwen_plr_probe_summary.md`
+- `results/summary/qwen_plr_r4_probe_comparison.csv`
+- `results/summary/qwen_plr_r4_probe_group_summary.csv`
+- `results/summary/qwen_lowrank_diffuse_plr_rank_sweep.csv`
+
 ## Reproducing the Analysis
 
 Install dependencies:

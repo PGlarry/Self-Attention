@@ -354,7 +354,18 @@ def sha256_file(path: Path) -> str:
 
 def write_artifact_manifest() -> dict:
     include_dirs = ["prompts", "scripts", "results", "figures"]
+    include_files = ["README.md", "MANIFEST.md", "REPRODUCIBILITY.md", "ARTIFACTS.md", "requirements.txt", ".gitignore"]
     files = []
+    for filename in include_files:
+        path = ROOT / filename
+        if path.exists():
+            files.append(
+                {
+                    "path": path.relative_to(ROOT).as_posix(),
+                    "bytes": path.stat().st_size,
+                    "sha256": sha256_file(path),
+                }
+            )
     for dirname in include_dirs:
         base = ROOT / dirname
         if not base.exists():

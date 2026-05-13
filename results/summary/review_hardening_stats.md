@@ -79,5 +79,5 @@ All analyses in this file reuse completed CSV outputs only. No model inference i
 ## Artifact Manifest
 
 - Manifest file: `artifact_manifest.json`
-- Public files hashed: 94
+- Public files hashed: 110
 - Private manuscript/review/planning paths remain excluded: `paper/`, `分析/`, `研究方案讨论/`.
